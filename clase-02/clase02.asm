@@ -16,8 +16,7 @@
 ; ============================================================
 
 ; ------------------------------------------------------------
-; default rel: le pide a NASM que genere referencias RELATIVAS
-; (RIP-relative) en vez de absolutas. Es la forma moderna de
+; default rel: le pide a NASM que genere referencias RELATIVAS; (RIP-relative) en vez de absolutas. Es la forma moderna de
 ; direccionar en 64 bits: el binario queda portable y NASM 3.02
 ; ya emite advertencia si se usa la forma absoluta por defecto.
 ; ------------------------------------------------------------
@@ -31,9 +30,9 @@ section .data
     len_titulo equ $ - titulo
     pregunta  db "Como se llama el heroe? (max 31 letras)", 10
     len_pregunta equ $ - pregunta
-    saludo   db "Bienvenido al reino, "
+    saludo   db "Hola, valiente heroe, bienvenido al reino de los registros "
     len_saludo equ $ - saludo
-    despedida db "Tu nombre ya vive en la memoria del proceso.", 10
+    despedida db "Vuelve pronto, el kernel guardara tu lugar.", 10
     len_despedida equ $ - despedida
     salto     db 10                                    ; un salto de linea suelto
 

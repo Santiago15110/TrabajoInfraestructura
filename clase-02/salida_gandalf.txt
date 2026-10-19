@@ -1,0 +1,4 @@
+LA LEYENDA DEL REGISTRO v0.2
+Como se llama el heroe? (max 31 letras)
+Hola, valiente heroe, bienvenido al reino de los registros Gandalf
+Vuelve pronto, el kernel guardara tu lugar.
