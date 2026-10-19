@@ -62,7 +62,13 @@ Compila y ejecuta la clase 2 con **tres** nombres distintos:
 
 Documenta la salida de cada caso en `entrega.md`.
 
-[RESOLVER AQUÍ: ¿Qué ocurre en el caso 3? Explica por qué, citando qué línea del `.asm` lo provoca.]
+[RESOLVER AQUÍ: ¿Qué ocurre en el caso 3? Explica por qué, citando qué línea del `.asm` lo provoca.
+
+El nombre se trunca en silencio ya que el programa saluda solo con las primeras 32 letras. 
+La causa es la línea mov rdx, 32 de la Acción 3, que le dice a read que lea como máximo 32 bytes. 
+Los 8 caracteres restantes y el salto de línea no entran al buffer, y como los 32 bytes leídos son todos letras,
+el programa no encuentra el LF y no ejecuta dec rax, por lo que lon queda en 32. No hay desbordamiento porque el
+límite lo pone el código.]
 
 ### A.2.2 (5 pts)
 Ejecuta `strace -e trace=read,write ./clase02` con un nombre de 10 letras (pega el `strace` en `entrega.md`) y responde:
@@ -71,8 +77,12 @@ Ejecuta `strace -e trace=read,write ./clase02` con un nombre de 10 letras (pega 
 2. ¿Por qué ese número y no 32 (el tamaño del buffer)?
 3. ¿En qué variable del código se guarda ese valor de retorno?
 
-[RESOLVER AQUÍ: ]
-
+[RESOLVER AQUÍ: 
+1. read devuelve 11 bytes.
+2. Porque 32 es solo el máximo pedido en RDX. read devuelve los bytes realmente leídos, 
+las 10 letras más el LF que agrega Enter.
+3. El valor llega en RAX y se guarda en la variable lon (mov [lon], rax), reservada en .bss.]
+ 
 ### A.2.3 (5 pts) — Modificación obligatoria
 En tu copia de `clase02.asm`, cambia **dos** cosas y haz que siga compilando y ejecutando:
 
