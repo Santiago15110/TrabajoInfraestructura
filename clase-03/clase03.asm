@@ -53,6 +53,8 @@ section .data
     len_error equ $ - error
     final     db "Los atributos quedaron grabados en los registros del heroe.", 10
     len_final equ $ - final
+    sin_fuerza     db "Un heroe sin fuerza no es heroe"
+    len_sin_fuerza equ $ - sin_fuerza
     salto     db 10
 
 ; ------------------------------------------------------------
@@ -117,6 +119,16 @@ _start:
 .fue_vacio:
     mov byte [v_fue], 0
 .fue_leido:
+    cmp byte [v_fue], 0
+    je .sin_fuerza
+    jmp .fue_ok
+.sin_fuerza:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, sin_fuerza
+    mov rdx, len_sin_fuerza
+    syscall
+.fue_ok:
 
     ; ---------- Accion 5: pedir AGI ----------
     mov rax, 1
