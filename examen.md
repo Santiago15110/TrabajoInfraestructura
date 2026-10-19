@@ -87,30 +87,46 @@ Compila la clase 3 y ejecútala con las **cinco** combinaciones de (FUE, AGI) de
 
 | Caso | FUE | AGI | ¿ELITE o NOVATO o ERROR? | Código salida (`$?`) |
 |------|-----|-----|--------------------------|----------------------|
-| 1    | 3   | 5   |                          |                      |
-| 2    | 0   | 9   |                          |                      |
-| 3    | 9   | 9   |                          |                      |
-| 4    | 0   | 0   |                          |                      |
-| 5    | `x` | 5   |                          |                      |
+| 1    | 3   | 5   |          ELITE           |         0            |
+| 2    | 0   | 9   |          ELITE           |         0            |
+| 3    | 9   | 9   |          ERROR           |         1            |
+| 4    | 0   | 0   |          NOVATO          |         0            |
+| 5    | `x` | 5   |          NOVATO          |         0            |
 
 > Caso 5: en lugar de un dígito, escribe la letra `x`.
 
-[RESOLVER AQUÍ: ¿Qué hace el programa con la letra `x`? ¿Por qué no se rompe?]
+[Al dar el caracter 'x' está en la busqueda del byte de su rango especifico el cual es de '0' el cual en codigo ASCII es 48 y el '9' es 57, entonces como x en codigo ASCII es 120, este es mayor al rango, entonces lo convierte en un 0, y ya este es un valor que queda guardado entonces por esa misma razón no se rompe el sistema]
 
 ### A.3.2 (6 pts)
 Con `strace -e trace=write,read,exit_group ./clase03`, usando FUE=8, AGI=2 (pega el `strace` en `entrega.md`), responde:
 
 1. ¿Cuántas llamadas `write` hay? Enuméralas (qué texto escribe cada una).
+
+Son 5
+
+ -write(1, "LA LEYENDA DEL REGISTRO v0.3\n", 29) = 29
+ -write(1, "Tienes 9 puntos para repartir. E"..., 62) = 62
+ -write(1, "FUE (fuerza, 0 a 9): ", 21)   = 21
+ -write(1, "AGI (agilidad, 0 a 9): ", 23) = 23
+ -write(1, "Error: no te alcanzan los 9 punt"..., 36) = 36
+
+
 2. ¿Cuántas llamadas `read` hay?
+
+son 2:
+
+-read(0, "8\n", 2)= 2
+-read(0, "2\n", 2)= 2
+
 3. ¿Por qué `read` devuelve siempre `2` y no `1`?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: porque en cada dato que escribo, le estoy dando enter entonces el sistema lo toma como un salto de linea y como el mismo sistema espera hasta 2 bytes entonces el enter es uno de ellos para que se ejecute]
 
 ### A.3.3 (6 pts) — Modificación obligatoria
 Implementa el **Ejercicio 1** de la clase 3 ("El heroe se enfada"): si FUE es 0, muestra la frase
 `"Un heroe sin fuerza no es heroe."` y sigue el flujo normal.
 
-Requisitos:
+Requisitos: 
 
 - Usa `cmp byte [v_fue], 0` y un salto `je` a un bloque nuevo `.sin_fuerza`.
 - El programa debe seguir imprimiendo el bloque de atributos y terminar con código 0.

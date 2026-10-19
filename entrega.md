@@ -8,6 +8,182 @@
 ### A.2.3
 ## A.3 - Los atributos del heroe (Clase 3)
 ### A.3.1
+
+**Caso 1 (FUE 3, AGI 5)
+
+--TERMINAL--
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ bash compilar.sh
+OK: binario 'clase03' generado. Ejecutalo con: ./clase03
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 3
+AGI (agilidad, 0 a 9): 5
+El heroe despierta como ELITE del reino.
+FUE: 3
+AGI: 5
+VID: 1
+Puntos gastados: 8
+Nivel: 2
+Los atributos quedaron grabados en los registros del heroe.
+
+
+--Salida de datos--
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ echo $?
+0
+
+
+
+**Caso 2 (FUE 0, AGI 9)
+
+--Terminal--
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 0
+AGI (agilidad, 0 a 9): 9
+El heroe despierta como ELITE del reino.
+FUE: 0
+AGI: 9
+VID: 0
+Puntos gastados: 9
+Nivel: 2
+Los atributos quedaron grabados en los registros del heroe.
+
+--Salida--
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ echo $?
+0
+
+
+**Caso 3 (FUE 9, AGI 9)
+
+--Terminal--
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 9
+AGI (agilidad, 0 a 9): 9
+Error: no te alcanzan los 9 puntos.
+
+
+--Salida--
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ echo $?
+1
+
+
+**Caso 4(FUE 0, AGI 0)
+
+--Terminal--
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 0
+AGI (agilidad, 0 a 9): 0
+El heroe sigue siendo NOVATO: hay margen para crecer.
+FUE: 0
+AGI: 0
+VID: 9
+Puntos gastados: 0
+Nivel: 1
+Los atributos quedaron grabados en los registros del heroe.
+
+
+--Salida--
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ echo $?
+0
+
+**Caso 5 (FUE 'X', AGI 5)
+
+--Terminal--
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): x
+AGI (agilidad, 0 a 9): 5
+El heroe sigue siendo NOVATO: hay margen para crecer.
+FUE: 0
+AGI: 5
+VID: 4
+Puntos gastados: 5
+Nivel: 1
+Los atributos quedaron grabados en los registros del heroe.
+
+
+--Salida--
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ echo $?
+0
+
+
+
+
 ### A.3.2
+
+**Strace
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ strace -o trace3.txt -e trace=write,read,exit_group ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 8
+AGI (agilidad, 0 a 9): 2
+Error: no te alcanzan los 9 puntos.
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ cat trace3.txt
+write(1, "LA LEYENDA DEL REGISTRO v0.3\n", 29) = 29
+write(1, "Tienes 9 puntos para repartir. E"..., 62) = 62
+write(1, "FUE (fuerza, 0 a 9): ", 21)   = 21
+read(0, "8\n", 2)                       = 2
+write(1, "AGI (agilidad, 0 a 9): ", 23) = 23
+read(0, "2\n", 2)                       = 2
+write(1, "Error: no te alcanzan los 9 punt"..., 36) = 36
++++ exited with 1 +++
+
+
 ### A.3.3
+
+
+**edicion de inicio
+
+ sin_fuerza     db "Un heroe sin fuerza no es heroe"
+    len_sin_fuerza equ $ - sin_fuerza
+    salto     db 10
+
+**Edicion del texto
+
+.fue_leido:
+    cmp byte [v_fue], 0
+    je .sin_fuerza
+    jmp .fue_ok
+.sin_fuerza:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, sin_fuerza
+    mov rdx, len_sin_fuerza
+    syscall
+.fue_ok:
+
+**Terminal del nuevo texto 
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 0
+Un heroe sin fuerza no es heroeAGI (agilidad, 0 a 9): 3
+El heroe sigue siendo NOVATO: hay margen para crecer.
+FUE: 0
+AGI: 3
+VID: 6
+Puntos gastados: 3
+Nivel: 1
+Los atributos quedaron grabados en los registros del heroe.
+
+
 ## A.4 -Crear desde cero (heroe.asm)
