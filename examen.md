@@ -335,19 +335,22 @@ _start:
 
 **1.** ¿Por qué en clase 2 se reserva `resb 32` para un nombre de "máximo 31 letras"?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: Porque read también guarda el LF del Enter: 31 letras más el LF son 32 bytes.]
 
 ---
 
 **2.** ¿Por qué la clase 2 quita el último byte (LF) del nombre antes de imprimirlo, usando `dec rax`?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: Porque el LF no es parte del nombre y imprimiría un salto de línea de más. Con dec rax se imprime 
+solo el nombre.]
 
 ---
 
 **3.** En clase 3, ¿por qué el programa valida FUE y AGI por separado (0–9) **y además** valida que la suma sea ≤ 9?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: FUE y AGI se validan por separado para asegurar que cada uno sea un dígito de 0 a 9. La suma
+se valida aparte porque el héroe tiene solo 9 puntos: si FUE + AGI pasa de 9, la VID (9 - FUE - AGI) saldría 
+negativa y el programa termina con error (salida 1). Cada atributo puede estar bien y la suma mal, por ejemplo 5 y 5.]
 
 ---
 
@@ -377,7 +380,20 @@ syscall]
 - Validar que sea un dígito entre `'0'` (48) y `'9'` (57); si no lo es, saltar a una etiqueta `.mal`.
 - Si es dígito, convertirlo a número (restando 48) y guardarlo en la variable numérica `n` (1 byte, de `.bss`).
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: asm
+mov rax, 0          ; sys_read
+mov rdi, 0          ; stdin
+mov rsi, b
+mov rdx, 2          ; 1 digito + LF
+syscall
+
+mov al, [b]
+cmp al, 48          ; menor que '0'
+jl .mal
+cmp al, 57          ; mayor que '9'
+jg .mal
+sub al, 48          ; ASCII -> numero
+mov [n], al]
 
 ---
 
