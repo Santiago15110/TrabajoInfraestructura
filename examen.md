@@ -100,30 +100,46 @@ Compila la clase 3 y ejecútala con las **cinco** combinaciones de (FUE, AGI) de
 
 | Caso | FUE | AGI | ¿ELITE o NOVATO o ERROR? | Código salida (`$?`) |
 |------|-----|-----|--------------------------|----------------------|
-| 1    | 3   | 5   |                          |                      |
-| 2    | 0   | 9   |                          |                      |
-| 3    | 9   | 9   |                          |                      |
-| 4    | 0   | 0   |                          |                      |
-| 5    | `x` | 5   |                          |                      |
+| 1    | 3   | 5   |          ELITE           |         0            |
+| 2    | 0   | 9   |          ELITE           |         0            |
+| 3    | 9   | 9   |          ERROR           |         1            |
+| 4    | 0   | 0   |          NOVATO          |         0            |
+| 5    | `x` | 5   |          NOVATO          |         0            |
 
 > Caso 5: en lugar de un dígito, escribe la letra `x`.
 
-[RESOLVER AQUÍ: ¿Qué hace el programa con la letra `x`? ¿Por qué no se rompe?]
+[Al dar el caracter 'x' está en la busqueda del byte de su rango especifico el cual es de '0' el cual en codigo ASCII es 48 y el '9' es 57, entonces como x en codigo ASCII es 120, este es mayor al rango, entonces lo convierte en un 0, y ya este es un valor que queda guardado entonces por esa misma razón no se rompe el sistema]
 
 ### A.3.2 (6 pts)
 Con `strace -e trace=write,read,exit_group ./clase03`, usando FUE=8, AGI=2 (pega el `strace` en `entrega.md`), responde:
 
 1. ¿Cuántas llamadas `write` hay? Enuméralas (qué texto escribe cada una).
+
+Son 5
+
+ -write(1, "LA LEYENDA DEL REGISTRO v0.3\n", 29) = 29
+ -write(1, "Tienes 9 puntos para repartir. E"..., 62) = 62
+ -write(1, "FUE (fuerza, 0 a 9): ", 21)   = 21
+ -write(1, "AGI (agilidad, 0 a 9): ", 23) = 23
+ -write(1, "Error: no te alcanzan los 9 punt"..., 36) = 36
+
+
 2. ¿Cuántas llamadas `read` hay?
+
+son 2:
+
+-read(0, "8\n", 2)= 2
+-read(0, "2\n", 2)= 2
+
 3. ¿Por qué `read` devuelve siempre `2` y no `1`?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: porque en cada dato que escribo, le estoy dando enter entonces el sistema lo toma como un salto de linea y como el mismo sistema espera hasta 2 bytes entonces el enter es uno de ellos para que se ejecute]
 
 ### A.3.3 (6 pts) — Modificación obligatoria
 Implementa el **Ejercicio 1** de la clase 3 ("El heroe se enfada"): si FUE es 0, muestra la frase
 `"Un heroe sin fuerza no es heroe."` y sigue el flujo normal.
 
-Requisitos:
+Requisitos: 
 
 - Usa `cmp byte [v_fue], 0` y un salto `je` a un bloque nuevo `.sin_fuerza`.
 - El programa debe seguir imprimiendo el bloque de atributos y terminar con código 0.
@@ -187,7 +203,8 @@ Porque ahí se guarda el número de la syscall antes de ejecutar syscall.]
 - c) `.bss`
 - d) `.rodata`
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: c) `.bss`
+en .bss se reserva en memoria con resb sin darle un valor inicial, y es por eso que no ocupa espacio en el binario, el sistema la reserva cuando se ejecuta el programa]
 
 ---
 
@@ -198,7 +215,8 @@ Porque ahí se guarda el número de la syscall antes de ejecutar syscall.]
 - c) El tamaño del buffer
 - d) El código de error
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: b) La cantidad de bytes leídos realmente. 
+Después de sys_read, rax guarda cuántos bytes alcanzó a leer el sistema, incluido el LF del Enter, y puede ser menos que el tamaño del buffer.]
 
 ---
 
@@ -209,7 +227,8 @@ Porque ahí se guarda el número de la syscall antes de ejecutar syscall.]
 - c) `cmp` + `jge`
 - d) `sub`
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: c) `cmp` + `jge`
+este compara los puntos gastados con el límite y deja el resultado de las banderas; jge salta al bloque ELITE si es mayor o igual, y si no, el programa sigue al bloque NOVATO]
 
 ---
 
@@ -229,17 +248,21 @@ db define 1 byte por cada dato, por eso cada letra ocupa 1 byte.]
 ---
 
 **3.** `resb 32` escribe 32 bytes de ceros en el binario.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: F
+resb 32 solo reserva 32 bytes de memoria en .bss, no los escribe en binario, entonces no va a aumentar el tamaño del ejecutable]
 
 ---
 
 **4.** En clase 2, el valor de `lon` (la longitud leída) viene de un `equ` fijo calculado por el ensamblador.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: F
+lon no es un equ, lo cual es una variable reservada en .bss donde se guarda lo que devuelve el sys_read y eso solo se sabe al ejecutar]
 
 ---
 
 **5.** `add al, 48` convierte un dígito numérico (0–9) en su carácter ASCII imprimible.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: V 
+48 es el código ASCII de '0', así que sumarlo a un número de 0 a 9 da el
+carácter correspondiente ('0' a '9'). Solo sirve para un dígito; con 10 o más ya no da un dígito.]
 
 ---
 
@@ -304,7 +327,7 @@ _start:
 > clase 3 está ausente para que un número (0–9) se vuelva un carácter
 > imprimible?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ:  El error es que en d se guarda el número 7 (byte 7, que no es imprimible) y no el carácter '7'. Falta convertirlo a ASCII sumando 48. Corrección: agregar add al, 48 después de mov al, 7, y así d guarda 55, que es '7', y sys_write lo imprime.]
 
 ---
 
