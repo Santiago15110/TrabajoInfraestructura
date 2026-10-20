@@ -216,3 +216,33 @@ Los atributos quedaron grabados en los registros del heroe.
 
 
 ## A.4 -Crear desde cero (heroe.asm)
+
+
+**Terminal
+
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ code heroe.asm
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ nasm -f elf64 heroe.asm -o heroe.o
+nasm: fatal: unable to open input file `heroe.asm' No such file or directory
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ nasm -f elf64 heroe.asm -o heroe.o
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ ld heroe heroe.o -o heroe
+/usr/bin/x86_64-linux-gnu-ld.bfd: input file 'heroe' is the same as output file
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ ./heroe
+-bash: ./heroe: No such file or directory
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ ls
+README.md  clase-02  entrega.md  heroe.asm
+clase-01   clase-03  examen.md   heroe.o
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ ld heroe.o -o heroe
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ ./heroe
+Nombre: david
+david
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ echo $?
+0
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ ./heroe
+Nombre: Sauron
+Sauron
+
+**Salida
+
+david_1511@DESKTOP-G665J9V:~/explorar/examen$ echo $?
+0

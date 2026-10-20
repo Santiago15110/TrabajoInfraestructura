@@ -193,7 +193,8 @@ Porque ahí se guarda el número de la syscall antes de ejecutar syscall.]
 - c) `.bss`
 - d) `.rodata`
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: c) `.bss`
+en .bss se reserva en memoria con resb sin darle un valor inicial, y es por eso que no ocupa espacio en el binario, el sistema la reserva cuando se ejecuta el programa]
 
 ---
 
@@ -204,7 +205,8 @@ Porque ahí se guarda el número de la syscall antes de ejecutar syscall.]
 - c) El tamaño del buffer
 - d) El código de error
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: b) La cantidad de bytes leídos realmente. 
+Después de sys_read, rax guarda cuántos bytes alcanzó a leer el sistema, incluido el LF del Enter, y puede ser menos que el tamaño del buffer.]
 
 ---
 
@@ -215,7 +217,8 @@ Porque ahí se guarda el número de la syscall antes de ejecutar syscall.]
 - c) `cmp` + `jge`
 - d) `sub`
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: c) `cmp` + `jge`
+este compara los puntos gastados con el límite y deja el resultado de las banderas; jge salta al bloque ELITE si es mayor o igual, y si no, el programa sigue al bloque NOVATO]
 
 ---
 
@@ -235,17 +238,21 @@ db define 1 byte por cada dato, por eso cada letra ocupa 1 byte.]
 ---
 
 **3.** `resb 32` escribe 32 bytes de ceros en el binario.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: F
+resb 32 solo reserva 32 bytes de memoria en .bss, no los escribe en binario, entonces no va a aumentar el tamaño del ejecutable]
 
 ---
 
 **4.** En clase 2, el valor de `lon` (la longitud leída) viene de un `equ` fijo calculado por el ensamblador.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: F
+lon no es un equ, lo cual es una variable reservada en .bss donde se guarda lo que devuelve el sys_read y eso solo se sabe al ejecutar]
 
 ---
 
 **5.** `add al, 48` convierte un dígito numérico (0–9) en su carácter ASCII imprimible.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: V 
+48 es el código ASCII de '0', así que sumarlo a un número de 0 a 9 da el
+carácter correspondiente ('0' a '9'). Solo sirve para un dígito; con 10 o más ya no da un dígito.]
 
 ---
 
@@ -310,7 +317,7 @@ _start:
 > clase 3 está ausente para que un número (0–9) se vuelva un carácter
 > imprimible?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ:  El error es que en d se guarda el número 7 (byte 7, que no es imprimible) y no el carácter '7'. Falta convertirlo a ASCII sumando 48. Corrección: agregar add al, 48 después de mov al, 7, y así d guarda 55, que es '7', y sys_write lo imprime.]
 
 ---
 
