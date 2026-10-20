@@ -44,7 +44,10 @@ Ejecuta `strace -e trace=write,exit_group ./clase01 2> trace1.txt` y responde (p
 2. ¿Cuál es el código de salida que devuelve `exit_group`?
 3. ¿Qué número de syscall usa `write`? (pista: mira la columna `syscall` o el `strace` completo).
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ:
+1. Hay 3 llamadas write.
+2. exit_group devuelve 0 (mov rdi, 0).
+3. write usa el número de syscall 1 (mov rax, 1).]
 
 ---
 
@@ -166,7 +169,8 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) 60
 - d) 2
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: b)1
+Porque en mi codigo cada write lleva mov rax, 1 antes del syscall y 1 es el número de sys_write.]
 
 ---
 
@@ -177,7 +181,8 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) `rax`
 - d) `rdx`
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: c) `rax`
+Porque ahí se guarda el número de la syscall antes de ejecutar syscall.]
 
 ---
 
@@ -218,12 +223,14 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 > Marca V o F. Si es F, escribe la corrección. Una respuesta correcta sin justificación vale 1 pt.
 
 **1.** `db` declara 8 bits (1 byte) por elemento de datos.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: V
+db define 1 byte por cada dato, por eso cada letra ocupa 1 byte.]
 
 ---
 
 **2.** `mov rax, 60` seguido de `syscall` es la forma estándar de terminar un programa en este curso.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: V
+60 es el número de exit y syscall termina el programa.]
 
 ---
 
@@ -268,7 +275,10 @@ _start:
 2. ¿Con qué código de salida termina? ¿Qué significa ese código? (2 pts)
 3. ¿Cuántas llamadas al kernel (`syscall`) hay? (2 pts)
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: 
+1. Imprime HOLA y un salto de línea.
+2. Con 3, que sale de mov rdi, 3. Distinto de 0 significa que no fue una salida exitosa.
+3. 2, el syscall del write y el del exit.]
 
 ---
 
@@ -326,7 +336,7 @@ _start:
 
 **4.** ¿Qué significa `equ $ - etiqueta` y por qué es útil en vez de contar los bytes a mano?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: Lo que significa $ - etiqueta es calcular el tamaño de bytes ya que mide el texto desde esa etiqueta y es util pues es menos probable de cometer errores.]
 
 ---
 
@@ -335,7 +345,12 @@ _start:
 **1. (2 pts)** Escribe el bloque exacto (registros + `syscall`) para **imprimir la cadena**
 `"FIN\n"` (con salto de línea) usando `sys_write`. Supón que la cadena está en la etiqueta `fin` y su longitud en `len_fin`.
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ:
+mov rax, 1
+mov rdi, 1
+mov rsi, fin
+mov rdx, len_fin
+syscall]
 
 ---
 
